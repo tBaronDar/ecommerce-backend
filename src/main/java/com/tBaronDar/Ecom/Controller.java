@@ -44,7 +44,7 @@ public class Controller {
     @PostMapping("/product")
     public ResponseEntity<?> addProduct(@RequestPart Product product, @RequestPart MultipartFile imageFile) {
         try {
-            Product savedProduct = productService.addProduct(product, imageFile);
+            Product savedProduct = productService.addOrUpdateProduct(product, imageFile);
             return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
 
         } catch (IOException e) {
@@ -60,6 +60,29 @@ public class Controller {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PutMapping("/product/update/{id}")
+    public ResponseEntity<String> updateProduct(@PathVariable int id,@RequestPart Product product, @RequestPart MultipartFile imageFile){
+        try {
+            Product updatedProduct = productService.addOrUpdateProduct(product,imageFile);
+            return new ResponseEntity<>("product updated", HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable int id){
+        var product = productService.getProductById(id);
+        if (product.isPresent()) {
+            productService.deleteProduct(id);
+            return new ResponseEntity<>("Product Deleted", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
 }
