@@ -1,4 +1,4 @@
-package com.tBaronDar.Ecom;
+package com.tBaronDar.Ecom.controller;
 
 import com.tBaronDar.Ecom.model.Product;
 import com.tBaronDar.Ecom.service.ProductService;
@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
