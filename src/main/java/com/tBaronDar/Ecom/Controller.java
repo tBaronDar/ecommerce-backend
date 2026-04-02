@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +54,7 @@ public class Controller {
     }
 
     @GetMapping("/product/{id}/image")
-    public ResponseEntity<byte[]> getProdImage(@PathVariable int id){
+    public ResponseEntity<byte[]> getProdImage(@PathVariable int id) {
         var product = productService.getProductById(id);
         if (product.isPresent()) {
             return new ResponseEntity<>(product.get().getImageData(), HttpStatus.FOUND);
@@ -63,18 +64,18 @@ public class Controller {
     }
 
     @PutMapping("/product/update/{id}")
-    public ResponseEntity<String> updateProduct(@PathVariable int id,@RequestPart Product product, @RequestPart MultipartFile imageFile){
+    public ResponseEntity<String> updateProduct(@PathVariable int id, @RequestPart Product product, @RequestPart MultipartFile imageFile) {
         try {
-            Product updatedProduct = productService.addOrUpdateProduct(product,imageFile);
+            Product updatedProduct = productService.addOrUpdateProduct(product, imageFile);
             return new ResponseEntity<>("product updated", HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
     }
 
     @DeleteMapping("/product/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable int id){
+    public ResponseEntity<String> deleteProduct(@PathVariable int id) {
         var product = productService.getProductById(id);
         if (product.isPresent()) {
             productService.deleteProduct(id);
@@ -83,6 +84,13 @@ public class Controller {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+    }
+
+    @GetMapping("/product/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam String keyword) {
+        List<Product> found = productService.searchProducts(keyword);
+        System.out.println("searching with " + keyword);
+        return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
 }
