@@ -36,7 +36,7 @@ public class Controller {
         var product = productService.getProductById(id);
 
         if (product.isPresent()) {
-            return new ResponseEntity<>(product, HttpStatus.FOUND);
+            return new ResponseEntity<>(product, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -57,7 +57,7 @@ public class Controller {
     public ResponseEntity<byte[]> getProdImage(@PathVariable int id) {
         var product = productService.getProductById(id);
         if (product.isPresent()) {
-            return new ResponseEntity<>(product.get().getImageData(), HttpStatus.FOUND);
+            return new ResponseEntity<>(product.get().getImageData(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
