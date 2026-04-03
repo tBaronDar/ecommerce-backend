@@ -36,7 +36,7 @@ public class OrderService {
         List<OrderItem> orderItems = new ArrayList<>();
         for (OrderItemRequest oir : orderReq.items()) {
             //search for the product requested
-            Product product = productRepo.findById(oir.id())
+            Product product = productRepo.findById(oir.productId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
             //update stock
             product.setStockQuantity(product.getStockQuantity() - oir.quantity());
@@ -47,13 +47,15 @@ public class OrderService {
             OrderItem orderItem = OrderItem.builder()
                     .product(product)
                     .quantity(oir.quantity())
-                    .totalPrice(product.getPrice().multiply(BigDecimal.valueOf(oir.quantity())))
                     .order(order)
+                    .totalPrice(product.getPrice().multiply(BigDecimal.valueOf(oir.quantity())))
                     .build();
             //add the created item to the list
             orderItems.add(orderItem);
 
         }
+        //last thing, put the items in the order
+        order.setItems(orderItems);
         //save to db
         Order savedOrder = orderRepo.save(order);
 

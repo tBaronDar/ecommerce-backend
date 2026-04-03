@@ -16,11 +16,11 @@ import java.math.BigDecimal;
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private Integer id;
     @ManyToOne
-    Product product;
-    int quantity;
+    private Product product;
+    private int quantity;
     BigDecimal totalPrice;
     @ManyToOne(fetch = FetchType.LAZY)
-    Order order;
+    private Order order;
 }
