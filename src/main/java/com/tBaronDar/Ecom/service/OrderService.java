@@ -60,7 +60,7 @@ public class OrderService {
         Order savedOrder = orderRepo.save(order);
 
         List<OrderItemResponse> itemResponses = new ArrayList<>();
-        for (OrderItem oi : savedOrder.getItems()){
+        for (OrderItem oi : savedOrder.getItems()) {
             OrderItemResponse itemResponse = new OrderItemResponse(
                     oi.getProduct().getName(),
                     oi.getQuantity(),
@@ -79,6 +79,32 @@ public class OrderService {
     }
 
     public List<OrderResponse> getAllOrderResponses() {
-        return null;
+        List<Order> orders = orderRepo.findAll();
+
+        List<OrderResponse> orderResponses = new ArrayList<>();
+        for (Order o : orders) {
+
+            List<OrderItemResponse> orderItemResponses = new ArrayList<>();
+            for (OrderItem oi : o.getItems()) {
+                OrderItemResponse oir = new OrderItemResponse(
+                        oi.getProduct().getName(),
+                        oi.getQuantity(),
+                        oi.getTotalPrice()
+                );
+                orderItemResponses.add(oir);
+            }
+
+            OrderResponse or = new OrderResponse(
+                    o.getOrderId(),
+                    o.getCustomerName(),
+                    o.getEmail(),
+                    o.getStatus(),
+                    o.getOrderDate(),
+                    orderItemResponses
+            );
+            orderResponses.add(or);
+
+        }
+        return orderResponses;
     }
 }
